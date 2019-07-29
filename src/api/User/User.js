@@ -8,7 +8,7 @@ const User = props => {
     console.log(
       'Sending Http request for new search query with name '
     );
-    
+    console.log(props.input);
     setIsLoading(true);
     fetch('https://api.github.com/search/users?q='+props.input)
       .then(response => {
@@ -30,12 +30,12 @@ const User = props => {
       });
   };
 
-  // useEffect(() => {
-  //   fetchData();
-  //   return () => {
-  //     console.log('Cleaning up...');
-  //   };
-  // }, [props.input]);
+  useEffect(() => {
+    fetchData();
+    return () => {
+      console.log('Cleaning up...');
+    };
+  }, [props.input]);
 
   useEffect(() => {
     return () => {
