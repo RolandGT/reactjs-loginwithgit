@@ -14,6 +14,7 @@
     color: black;
     font-size: 16px;
     max-width:256px;
+    min-width:256px;
     height:auto;
     margin:8px;
     padding:16px;
@@ -59,7 +60,8 @@ hr{
     font-size: 16px;
     margin-top:16px;
     padding: 0;
-    width: 288px;
+    max-width: 258px;
+    min-width:258px;
     height:48px;
     border: none;
     text-align: center;
@@ -83,8 +85,7 @@ hr{
   }
   .welcome{
     position: relative;
-    display: inline-table;
-    justify-content: center;
+    
   }
   a{
       text-decoration: none;
@@ -100,11 +101,14 @@ hr{
     padding: 8px;
     padding-top:32px;
     margin-top:16px;
-    margin-left:8px;
     color:black;
     line-height: 20px;
 }
-
+p{
+  margin:0;
+  margin-left:8px;
+  margin-bottom:8px;
+}
 input, .search-input{
     border: 2px solid #00a838;
     margin-left:8px;
@@ -113,13 +117,16 @@ input, .search-input{
     color: black;
     line-height: 20px;
     font-size: 16px;
-    margin-bottom: 32px;
+    margin-bottom:8px;
     border-radius:8px;
 }
 button.search-button{
     position: relative;
     margin:0;
+    margin-left:8px;
     background-color: grey;
-    width:208px;
-    margin-left:56px
+    max-width:208px;
+    min-width:208px;
+    height: 32px;
+    
 }

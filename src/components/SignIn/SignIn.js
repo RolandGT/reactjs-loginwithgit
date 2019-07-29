@@ -1,8 +1,9 @@
 import React, { useState, useContext } from "react";
 import { AuthContext } from "../../App";
 import "./SignIn.css";
+import "../../bootstrap-grid.min.css";
 import firebase from 'firebase';
-import Welcome from '../Home/Home';
+import Home from '../Home/Home';
 import { BrowserRouter, Route } from "react-router-dom";
 
 const SignIn = props => {
@@ -24,7 +25,7 @@ const SignIn = props => {
         Auth.email.setUserEmail(email);
         Auth.avatarURL.setUserAvatarURL(photoURL);
         Auth.lastSignInDate.setUserLastSignInDate(metadata.lastSignInTime);
-        props.history.push('/welcome');
+        props.history.push('/home');
         // console.log(token);
         // console.log(user.email);
         // console.log(user.metadata.lastSignInTime);
@@ -69,7 +70,7 @@ const SignIn = props => {
         <button onClick={e => handleSignOut(e)}>Sign out</button>
         <BrowserRouter>
           <Route >
-            <Welcome isLoggedIn={Auth.login.isLoggedIn} userEmail={Auth.email.userEmail} userAvatarURL={Auth.avatarURL.userAvatarURL} userLastSignInDate={Auth.lastSignInDate.userLastSignInDate}/>
+            <Home isLoggedIn={Auth.login.isLoggedIn} userEmail={Auth.email.userEmail} userAvatarURL={Auth.avatarURL.userAvatarURL} userLastSignInDate={Auth.lastSignInDate.userLastSignInDate}/>
           </Route>
         </BrowserRouter>
       </div>

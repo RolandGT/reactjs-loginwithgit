@@ -1,49 +1,41 @@
 import React, { useState, useEffect } from 'react';
 
-import Profile from '../../components/Profile/Profile';
-
 const User = props => {
-  const [loadedUser, setLoadedUser] = useState({});
+  const [loadedUsers, setLoadedUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  console.log(props.input)
-
-  const fetchData = props => {
+  
+  const fetchData = user => {
     console.log(
-      'Sending Http request for new character with id '
+      'Sending Http request for new search query with name '
     );
+    
     setIsLoading(true);
     fetch('https://api.github.com/search/users?q='+props.input)
       .then(response => {
         if (!response.ok) {
-          throw new Error('Could not fetch person!');
+          throw new Error('Could not fetch user!');
         }
         console.log(response)
-        // return response.json();
-        return response;
+        return response.json();
+        
       })
-      .then(userData => {
-          console.log(userData);
-        const loadedUser = {
-          
-        //   name: userData.name,
-          
-        };
+      .then(response => {
+        console.log(response.items);
+        setLoadedUsers (response.items);
         setIsLoading(false);
-        setLoadedUser(loadedUser);
       })
       .catch(err => {
         console.log(err);
-        console.log('nu va')
         setIsLoading(false);
       });
   };
 
-  useEffect(() => {
-    fetchData();
-    return () => {
-      console.log('Cleaning up...');
-    };
-  }, [props.input]);
+  // useEffect(() => {
+  //   fetchData();
+  //   return () => {
+  //     console.log('Cleaning up...');
+  //   };
+  // }, [props.input]);
 
   useEffect(() => {
     return () => {
@@ -52,12 +44,19 @@ const User = props => {
   }, []);
 
   let content = <p>Loading User...</p>;
-
-  if (!isLoading && loadedUser.id) {
-    content = (
-      <Profile name={loadedUser.name}/>
-    );
-  } else if (!isLoading && !loadedUser.id) {
+  let usersArray = [];
+  if (!isLoading && loadedUsers) {
+    // content = <Profile  users={loadedUsers} />
+    
+    loadedUsers.map((item, i) => (
+      usersArray.push(<li  key={i}>
+          <span >{ item.login }</span>
+      </li>)
+     
+    ))
+    content = usersArray
+    
+  } else if (!isLoading && !loadedUsers) {
     content = <p>Failed to fetch user.</p>;
   }
   return content;

@@ -1,10 +1,14 @@
 import React, {useState, useEffect, useContext } from "react";
 import "./Home.css";
+import "../../bootstrap-grid.min.css";
 import { AuthContext } from "../../App";
 import firebase from 'firebase';
-const Welcome = props =>{
+import User from "../../api/User/User";
+
+const Home = props =>{
     const Auth = useContext(AuthContext);
     const[content,setContent] = useState();
+    const[userProf,setProfile] = useState();
     const[lastSignIn,setLastSignIn] = useState();
     //const[userEmail,setUserEmail] = useState('');
     const[searchString, setSearchString] = useState('');
@@ -12,11 +16,13 @@ const Welcome = props =>{
         e.preventDefault();
         setSearchString(e.target.value);
     }
-    const handleSubmit = (e, string )=>{
+    const handleSearch = (e)=>{
         e.preventDefault();
         setSearchString(searchString);
-        console.log(searchString);
-  
+        //let userProf= <Profile input={searchString}/>
+        let userProf= <User input={searchString}/>
+        setProfile(userProf);
+        console.log('handle search works');
     }
     const handleSignOut = e =>{
         e.preventDefault();
@@ -35,6 +41,8 @@ const Welcome = props =>{
       };
     useEffect(() => {
         firebase.auth().onAuthStateChanged(function(result) {
+            
+            Auth.name.setUserName();
             if (result.user) {
                 Auth.avatarURL.setUserAvatarURL(result.user.photoURL);
             } else {
@@ -50,27 +58,38 @@ const Welcome = props =>{
             setContent('Please sign in.');
             setLastSignIn();
         }
-    },[Auth.avatarURL, Auth.lastSignInDate.userLastSignInDate, Auth.login.isLoggedIn]);
+    },[Auth.avatarURL, Auth.lastSignInDate.userLastSignInDate, Auth.login.isLoggedIn,Auth.name]);
     if(Auth.login.isLoggedIn){
         return (
-            <div className='welcome'>
-                <div className="userInfo-wrapper">
-                    <div className="userInfo">
-                        <img className="avatar" src={Auth.avatarURL.userAvatarURL} alt='avatar'/>
+            <div className='container'>
+                <div className='row'>
+                    <div className="col-md-6">
+                        <div className="userInfo-wrapper">
+                            <div className="userInfo">
+                                <img className="avatar" src={Auth.avatarURL.userAvatarURL} alt='avatar'/>
+                            </div>
+                            <div className="userInfo">
+                                <p><b>{content}</b></p><p> {Auth.email.userEmail} </p><br></br><hr></hr>
+                                <p><b>{lastSignIn}</b></p><p> {Auth.lastSignInDate.userLastSignInDate}</p>
+                            </div>
+                        </div>
+                        <div>
+                            <button onClick={e => handleSignOut(e)}>Sign out</button>
+                        </div>
                     </div>
-                    <div className="userInfo">
-                        <p><b>{content}</b></p><p> {Auth.email.userEmail} </p><br></br><hr></hr>
-                        <p><b>{lastSignIn}</b></p><p> {Auth.lastSignInDate.userLastSignInDate}</p>
+                    <div className='col-md-6 '>
+                        <div className='search-input-wrapper'>
+                            <form  onSubmit={handleSearch}>
+                                <p>Name:</p>
+                                <input className='search-input' type="text" value={searchString} onChange={handleChange} />
+                                <button className='search-button' type="submit" value="Submit"  >Search</button>
+                            </form>
+                        </div>
+                        <div className='profile'>
+                            {userProf}
+                        </div>
                     </div>
-                </div>
-                <button onClick={e => handleSignOut(e)}>Sign out</button>
-                <div className='search-input-wrapper'>
-                    <form  onSubmit={handleSubmit}>
-                        <labe>Name:</labe>
-                        <input calssName='search-input' type="text" value={searchString} onChange={handleChange} />
-                        <button className='search-button' type="submit" value="Submit" >Search</button>
-                    </form>
-                </div>
+            </div>
             </div>
         );
     }
@@ -80,4 +99,4 @@ const Welcome = props =>{
         </div>
     );
 }
-export default Welcome
+export default Home
